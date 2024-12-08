@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+    <div class="container mt-5 mb-5">
+        <div class="d-flex justify-content-center row">
+            <div class="col-md-10">
+                {% for pizza  in object_list %}
+                    <div class="row p-2 bg-white border rounded mt-2">
+                        <div class="col-md-3 mt-1"><img class="img-fluid img-responsive rounded product-image"
+                                                        src="{{ pizza.image.url }}"></div>
+                        <div class="col-md-6 mt-1">
+                            <h5>{{ pizza.name }}</h5>
+                            <div class="d-flex flex-row">
+                                <div class="ratings mr-2"><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                        class="fa fa-star"></i><i class="fa fa-star"></i></div>
+                            </div>
+                            <div class="mt-1 mb-1 spec-1">
+                                {% for tag in pizza.tags.all %}
+                                    <span><a href="{% if title == 'Pizzas' %}
+                                    {% url 'pizza:tag_pizza' tag.name %}
+                                    {% else %}
+                                    {% url 'pizza:tag_burger' tag.name %}
+                                    {% endif %}">{{ tag.name }}</a></span><br>
+                                {% endfor %}
+                            </div>
+                            <div class="mt-1 mb-1 spec-1">
+                            </div>
+                            <p class="text-justify text-truncate para mb-0">{{ pizza.description }}<br><br></p>
+                        </div>
+                        <div class="align-items-center align-content-center col-md-3 border-left mt-1">
+                            <div class="d-flex flex-row align-items-center">
+                                <h4 class="mr-1">${{ pizza.price }}</h4><span class="strike-text">No Sale</span>
+                            </div>
+                            <h6 class="text-success">Free shipping</h6>
+                            <h6 class="text-success">{{ pizza.thick_type }}</h6>
+                            <div class="d-flex flex-column mt-4">
+                                <a href="{{ pizza.get_absolute_url }}" type="button" class="btn btn-primary btn-sm">
+                                    <button class="btn btn-primary btn-sm" type="button">Details</button>
+                                </a>
+                                <button class="btn btn-outline-primary btn-sm mt-2" type="button">
+                                    <a href="{% url 'home:remove_from_cart' pizza.get_model_name pizza.id %}">Remove From Cart</a></button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center">
+        <nav aria-label="Page navigation example">
+            {% include 'layouts/pagination.html' with page_obj=pizzas %}
+        </nav>
+    </div>
+
+
+{% endblock %}

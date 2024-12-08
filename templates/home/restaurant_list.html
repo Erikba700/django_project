@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static "css/pagination.css" %}">
+    <link rel="stylesheet" href="{% static "css/restaurant.css" %}">
+    <div class="container">
+        <div class="header-container">
+            <h1 class="h1 text-center" id="pageHeaderTitle">Restaurants</h1>
+            <a href="{% url "home:add_restaurant" %}" class="btn btn-success">Add Restaurant</a>
+        </div>
+    </div>
+    {% for restaurant in restaurants %}
+        {% if forloop.counter <= forloop.revcounter %}
+            <section class="dark">
+                <div class="container py-4">
+                    <h1 class="h1 text-center" id="pageHeaderTitle">{{ restaurant.name }}</h1>
+
+                    <article class="postcard dark {% cycle "blue" "red" "green" "yellow" %}">
+                        <a class="postcard__img_link" href="{% url "home:res_detail" restaurant.pk %}">
+                            <img class="postcard__img" src="{{ restaurant.image.url }}" alt="Image Title"/>
+                        </a>
+                        <div class="postcard__text">
+                            <h1 class="postcard__title blue"><a
+                                    href="{% url "home:res_detail" restaurant.pk %}">{{ restaurant.name }}</a></h1>
+                            <div class="postcard__subtitle small">
+                                <time datetime="2020-05-25 12:00:00">
+                                    <i class="fas fa-calendar-alt mr-2"></i>{{ restaurant.created_at|date:"D d M Y" }}
+                                </time>
+                            </div>
+                            <div class="postcard__bar"></div>
+                            <div class="postcard__preview-txt">{{ restaurant.description }}
+                            </div>
+                            <ul class="postcard__tagbox">
+                                <li class="tag__item"><i class="fas fa-tag mr-2"></i>Pizza
+                                    Count {{ restaurant.pizzas.all|length }}</li>
+                                <li class="tag__item"><i class="fas fa-clock mr-2"></i>Burger
+                                    Count {{ restaurant.burgers.all|length }}</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                </div>
+            </section>
+
+        {% else %}
+            <section class="light">
+                <div class="container py-2">
+                    <div class="h1 text-center text-dark" id="pageHeaderTitle">{{ restaurant.name }}</div>
+
+                    <article class="postcard light {% cycle "blue" "red" "green" "yellow" %}">
+                        <a class="postcard__img_link" href="{% url "home:res_detail" restaurant.pk %}">
+                            <img class="postcard__img" src="{{ restaurant.image.url }}" alt="Image Title"/>
+                        </a>
+                        <div class="postcard__text t-dark">
+                            <h1 class="postcard__title blue"><a
+                                    href="{% url "home:res_detail" restaurant.pk %}">{{ restaurant.name }}</a></h1>
+                            <div class="postcard__subtitle small">
+                                <time datetime="2020-05-25 12:00:00">
+                                    <i class="fas fa-calendar-alt mr-2"></i>{{ restaurant.created_at|date:"D d M Y" }}
+                                </time>
+                            </div>
+                            <div class="postcard__bar"></div>
+                            <div class="postcard__preview-txt">
+                                {{ restaurant.description }}
+                            </div>
+                            <ul class="postcard__tagbox">
+                                <li class="tag__item"><i class="fas fa-tag mr-2"></i>Pizza
+                                    Count {{ restaurant.pizzas.all|length }}</li>
+                                <li class="tag__item"><i class="fas fa-clock mr-2"></i>Burger
+                                    Count {{ restaurant.burgers.all|length }}</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                </div>
+            </section>
+        {% endif %}
+
+    {% endfor %}
+    <div class="container">
+        {% include "layouts/pagination.html" with page_obj=restaurants %}
+    </div>
+
+{% endblock %}

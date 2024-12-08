@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h2 class="mb-4">Advanced Search</h2>
+        <form>
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" name="pizza_name" id="name" placeholder="Enter pizza name">
+            </div>
+            <div class="mb-3">
+                <label for="price" class="form-label">Price Range</label>
+                <div class="d-flex justify-content-between">
+                    <input type="number" name="min_price" class="form-control" id="min-price" placeholder="Min price"
+                           style="width: 45%;">
+                    <span class="mx-2">to</span>
+                    <input type="number" name="max_price" class="form-control" id="max-price" placeholder="Max price"
+                           style="width: 45%;">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="type" class="form-label>">Type</label>
+                <select class="form-select" id="type" name="type">
+                    <option selected value="">Choose...</option>
+                    <option value="pizza">Pizza</option>
+                    <option value="burger">Burger</option>
+                </select>
+                <div class="mb-3">
+                    <label for="thick_type" class="form-label">Thickness Type or burger Type</label>
+                    <select class="form-select" id="thick_type" name="thick_type">
+                        <option selected value="">Choose...</option>
+                        <option value="thin">Thin(for pizza)</option>
+                        <option value="thick">Thick(for pizza)</option>
+                        <option value="small">Small(for burger)</option>
+                        <option value="medium">Medium(for burger)</option>
+                        <option value="large">Large(for burger)</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="restaurant" class="form-label>">Restaurant</label>
+                    <select class="form-select" id="restaurant" name="restaurant">
+                        <option selected value="">Choose Restaurant...</option>
+                        {% for restaurant in restaurants %}
+                            <option value="{{ restaurant.pk }}">{{ restaurant.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Search</button>
+            </div>
+        </form>
+    </div>
+    <div class="row mt-5">
+        {% for result in results %}
+            {% if forloop.counter|divisibleby:2 %}
+                </div>
+                <div class="row mt-3">
+            {% endif %}
+            <div class="col-md-6">
+                <div class="card">
+                    <img src="{{ result.image.url }}" class="card-img-top pizza-image" alt="{{ result.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ result.name }}</h5>
+                        <p class="card-text">{{ result.description|truncatewords:5 }}</p>
+                        <a href="{{ result.get_absolute_url }}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+{% endblock %}
